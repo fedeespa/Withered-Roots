@@ -1,16 +1,35 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Renderer))]
 public class Unit : MonoBehaviour
 {
     [SerializeField]
     private string unitName;
     [SerializeField]
-    private int movementPoints; 
+    private int movementPoints;
+    private int _remainingMovementPoints;
     private bool isAlive = true;
     [SerializeField]
-    private bool isPlayerControlled; // Para saber si habilitar clics o usar IA
+    private bool isPlayerControlled; // Para saber si habilitar clicks o usar IA
 
     private TurnManager turnManager;
+    private bool _currentlyUnitTurn = false;
+    [SerializeField] private GameObject _walkableTilePrefab;
+    private List<Vector3> _walkableTiles = new();
+    private Dictionary<Vector3, GameObject> _walkableTileObjects = new();
+
+    private const float gridSize = 1.0f;
+    private const float SPEED = 5f;
+    private const float ROTATE_SPEED = 180f;
+    private Vector3Int? _isInteractingWithCell;
+
+    [SerializeField] private Material _litMaterial;
+    [SerializeField] private Material _attackableMaterial;
 
     void Awake()
     {
@@ -27,11 +46,15 @@ public class Unit : MonoBehaviour
     }
     public void BeginTurn()
     {
+        _currentlyUnitTurn = true;
         Debug.Log("Es el turno de: " + unitName);
 
         if (isPlayerControlled)
         {
-            turnManager.EndCurrentTurn();
+            _remainingMovementPoints = movementPoints;
+            UpdateRemainingMovement();
+            return;
+            // turnManager.EndCurrentTurn();
             // 1. Mostrar casillas a las que se puede mover (Grilla)
             // 2. Habilitar la selección de objetivos para atacar
         }
@@ -42,13 +65,216 @@ public class Unit : MonoBehaviour
         }
     }
 
-    System.Collections.IEnumerator ExecuteEnemyAI()
+    private void DestroyWalkableTiles()
     {
-        yield return new WaitForSeconds(1.5f); // Pausa simulando pensamiento
+        foreach (var tile in _walkableTiles)
+        {
+            Destroy(_walkableTileObjects[tile]);
+        }
+        _walkableTiles.Clear();
+        _walkableTileObjects.Clear();
+    }
 
-        // Lógica de IA: Buscar objetivo más cercano, moverse y atacar
+    private void UpdateRemainingMovement()
+    {
+        DestroyWalkableTiles();
 
-        // Al finalizar sus acciones, le avisa al gestor para pasar al siguiente
+        var currentPosition = gameObject.transform.position;
+        for (var i = -_remainingMovementPoints; i <= _remainingMovementPoints; ++i)
+        {
+            for (var j = -_remainingMovementPoints; j <= _remainingMovementPoints; ++j)
+            {
+                if (i == 0 && j == 0) continue;
+
+                if (Math.Abs(i) + Math.Abs(j) <= _remainingMovementPoints)
+                {
+                    var vector = currentPosition + new Vector3(i, 0, j);
+                    _walkableTiles.Add(vector);
+                    _walkableTileObjects[vector] = Instantiate(_walkableTilePrefab, vector, Quaternion.identity);
+                }
+            }
+        }
+
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            if (DistanceToUnitPosition(enemy.transform.position) <= _remainingMovementPoints + 1)
+            {
+                enemy.GetComponent<Unit>().BecomeAttackable();
+            }
+            else
+            {
+                enemy.GetComponent<Unit>().BecomeLit();
+            }
+
+        }
+    }
+
+    private IEnumerator ExecuteEnemyAI()
+    {
+        var player = GameObject.FindGameObjectWithTag("Player");
+        Debug.Log($"Player exists {player != null}");
+        if (player != null)
+        {
+            yield return StartCoroutine(GetClosestReachable(player.transform.position));
+        }
+        Debug.Log("Ending Turn");
+        EndTurn();
+    }
+
+    public IEnumerator GetClosestReachable(Vector3 target)
+    {
+        var start = transform.position;
+        int dx = (int)(target.x - start.x);
+        int dz = (int)(target.y - start.y);
+        int distance = Mathf.Abs(dx) + Mathf.Abs(dz);
+
+        Debug.Log($"Distance {distance} of {movementPoints}");
+
+        if (distance > movementPoints)
+        {
+            int stepX = Mathf.Clamp(dx, -movementPoints, movementPoints);
+            int remaining = movementPoints - Mathf.Abs(stepX);
+            int stepZ = Mathf.Clamp(dz, -remaining, remaining);
+
+            var targetLocation = new Vector3Int((int)start.x + stepX, 0, (int)start.z + stepZ);
+
+            Debug.Log($"MoveTo {targetLocation}");
+            yield return StartCoroutine(MoveToCell(targetLocation));
+
+            if (distance - movementPoints == 1)
+            {
+                yield return StartCoroutine(AttackUnit(GameObject.FindGameObjectWithTag("Player")));
+            }
+
+            yield break;
+        }
+
+        if (distance > 0)
+        {
+            int stepsToTake = distance - 1;
+
+            int stepX = Mathf.Clamp(dx, -stepsToTake, stepsToTake);
+            int remaining = stepsToTake - Mathf.Abs(stepX);
+            int stepZ = Mathf.Clamp(dz, -remaining, remaining);
+
+            var targetLocation = new Vector3Int((int)start.x + stepX, 0, (int)start.z + stepZ);
+
+            Debug.Log($"MoveTo2 {targetLocation}");
+            yield return StartCoroutine(MoveToCell(targetLocation));
+            yield return StartCoroutine(AttackUnit(GameObject.FindGameObjectWithTag("Player")));
+        }
+    }
+
+    private float DistanceToUnitPosition(Vector3 unitPosition)
+    {
+        var currentPosition = transform.position;
+        var unitDistanceX = Math.Abs(currentPosition.x - unitPosition.x);
+        var unitDistanceZ = Math.Abs(currentPosition.z - unitPosition.z);
+
+        return unitDistanceX + unitDistanceZ;
+    }
+
+    public void OnCellClicked(Vector3Int cell)
+    {
+        if (_isInteractingWithCell != null) return;
+
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            if (enemy.transform.position == cell && DistanceToUnitPosition(enemy.transform.position) <= 1)
+            {
+                _isInteractingWithCell = cell;
+                StartCoroutine(AttackUnit(enemy));
+                return;
+            }
+        }
+
+        StartCoroutine(MoveToCell(cell));
+    }
+
+    public IEnumerator AttackUnit(GameObject unit)
+    {
+        var target = Quaternion.Euler(-90, 0, 0);
+        while (Quaternion.Angle(unit.transform.rotation, target) > 0.01f)
+        {
+            unit.transform.rotation = Quaternion.RotateTowards(
+                unit.transform.rotation,
+                target,
+                ROTATE_SPEED * Time.deltaTime
+            );
+            yield return null;
+        }
+
+        unit.transform.rotation = target; // snap to exact
+
+        Destroy(unit);
+        _isInteractingWithCell = null;
+    }
+
+    public IEnumerator MoveToCell(Vector3Int cell)
+    {
+        if (!_currentlyUnitTurn || !_walkableTiles.Contains(cell)) yield break;
+
+        _isInteractingWithCell = cell;
+        Vector3 start = transform.position;
+
+        // Smoothly move over the specified duration
+        while (Vector3.Distance(transform.position, cell) > 0.001f)
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                cell,
+                SPEED * Time.deltaTime
+            );
+            yield return null;
+        }
+
+        // Snap to exact position to avoid floating point errors
+        transform.position = cell;
+        _isInteractingWithCell = null;
+        _remainingMovementPoints = _remainingMovementPoints - (int)Math.Abs(start.x - cell.x) - (int)Math.Abs(start.z - cell.z);
+
+        if (isPlayerControlled)
+        {
+            UpdateRemainingMovement();
+        }
+    }
+
+    public void EndTurn()
+    {
+        if (!_currentlyUnitTurn) return;
+
+        if (isPlayerControlled)
+        {
+            DestroyWalkableTiles();
+
+            foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                enemy.GetComponent<Unit>().BecomeLit();
+            }
+        }
+
+        _currentlyUnitTurn = false;
         turnManager.EndCurrentTurn();
+    }
+
+    public void BecomeAttackable()
+    {
+        SetMaterial(_attackableMaterial);
+    }
+
+    public void BecomeLit()
+    {
+        SetMaterial(_litMaterial);
+    }
+
+    private void SetMaterial(Material material)
+    {
+        Renderer rend = GetComponent<Renderer>();
+        Material[] mats = new Material[rend.materials.Length];
+        for (int i = 0; i < mats.Length; i++)
+        {
+            mats[i] = material;
+        }
+        rend.materials = mats;
     }
 }

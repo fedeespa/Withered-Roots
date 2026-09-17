@@ -11,7 +11,7 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private int movementPoints;
     private int _remainingMovementPoints;
-    private bool isAlive = true;
+    public bool isAlive = true;
     public bool blockRotation = false;
     [SerializeField]
     private bool isPlayerControlled; // Para saber si habilitar clicks o usar IA
@@ -25,6 +25,7 @@ public class Unit : MonoBehaviour
     private List<Vector3> _walkableTiles = new();
     private Dictionary<Vector3, GameObject> _walkableTileObjects = new();
 
+    public Grid grid;
     private const float gridSize = 1.0f;
     private const float SPEED = 5f;
     private const float ROTATE_SPEED = 180f;
@@ -47,11 +48,6 @@ public class Unit : MonoBehaviour
     public bool GetIsPlayerControlled()
     {
         return isPlayerControlled;
-    }
-
-    public bool GetIsAlive()
-    {
-        return isAlive;
     }
 
     public void BeginTurn()
@@ -88,6 +84,7 @@ public class Unit : MonoBehaviour
 
         foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
+            if (!enemy.GetComponent<Unit>().isAlive) continue;
             var enemyPosition = Vector3Int.FloorToInt(enemy.transform.position);
             if (DistanceToUnitPosition(enemyPosition) <= _remainingMovementPoints + 1)
             {
@@ -105,11 +102,20 @@ public class Unit : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Comprueba mediante física si la casilla destino está libre de obstáculos.
-    /// </summary>
     public bool IsCellWalkable(Vector3 targetPosition)
     {
+        if (isPlayerControlled)
+        {
+            int minX = -10;
+            int maxX = 9;
+            int minZ = -10;
+            int maxZ = 9;
+            Vector3Int cell = grid.WorldToCell(targetPosition);
+
+            if (!(cell.x >= minX && cell.x <= maxX
+                && cell.z >= minZ && cell.z <= maxZ)) return false;
+        }
+
         return !Physics.CheckSphere(targetPosition, 0.4f, obstacleLayer);
     }
 
@@ -128,7 +134,6 @@ public class Unit : MonoBehaviour
                 {
                     var vector = currentPosition + new Vector3Int(i, 0, j);
 
-                    // Solo genera e incluye la casilla si NO hay obstáculos
                     if (IsCellWalkable(vector))
                     {
                         _walkableTiles.Add(vector);
@@ -232,7 +237,8 @@ public class Unit : MonoBehaviour
         unit.transform.rotation = target;
         _isInteractingWithCell = null;
 
-        if (unit.GetComponent<Unit>().GetIsPlayerControlled())
+        var entity = unit.GetComponent<Unit>();
+        if (entity.GetIsPlayerControlled())
         {
             SceneManager.LoadScene("GameOverScene");
         }
@@ -245,12 +251,14 @@ public class Unit : MonoBehaviour
             {
                 SceneManager.LoadScene("GameWonScene");
             }
+            else
+            {
+                entity.isAlive = false;
+                UpdateRemainingMovement();
+            }
         }
     }
 
-    /// <summary>
-    /// Calcula la mejor ruta paso a paso (BFS) evitando las casillas con obstáculos.
-    /// </summary>
     private List<Vector3> FindPath(Vector3 start, Vector3 target)
     {
         Queue<Vector3> queue = new Queue<Vector3>();

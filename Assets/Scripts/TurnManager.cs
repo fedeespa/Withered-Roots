@@ -29,7 +29,7 @@ public class TurnManager : MonoBehaviour
         turnQueue.Clear();
         foreach (GameObject unit in allUnits)
         {
-            if (unit.GetComponent<Unit>().GetIsAlive())
+            if (unit.GetComponent<Unit>().isAlive)
             {
                 turnQueue.Enqueue(unit.GetComponent<Unit>());
             }

@@ -67,7 +67,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void DestroyWalkableTiles()
+    public void DestroyWalkableTiles()
     {
         foreach (var tile in _walkableTiles)
         {
@@ -79,23 +79,7 @@ public class Unit : MonoBehaviour
 
     private void UpdateRemainingMovement()
     {
-        DestroyWalkableTiles();
-
-        var currentPosition = gameObject.transform.position;
-        for (var i = -_remainingMovementPoints; i <= _remainingMovementPoints; ++i)
-        {
-            for (var j = -_remainingMovementPoints; j <= _remainingMovementPoints; ++j)
-            {
-                if (i == 0 && j == 0) continue;
-
-                if (Math.Abs(i) + Math.Abs(j) <= _remainingMovementPoints)
-                {
-                    var vector = currentPosition + new Vector3Int(i, 0, j);
-                    _walkableTiles.Add(vector);
-                    _walkableTileObjects[vector] = Instantiate(_walkableTilePrefab, vector, Quaternion.identity);
-                }
-            }
-        }
+        ShowWalkableTiles(_remainingMovementPoints);
 
         foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
@@ -114,6 +98,33 @@ public class Unit : MonoBehaviour
                 enemy.GetComponent<Unit>().BecomeLit();
             }
 
+        }
+    }
+
+    public void ShowWalkableTiles(int? totalMovementPoints = null)
+    {
+        var remainingMovementPoints = totalMovementPoints ?? movementPoints;
+        DestroyWalkableTiles();
+        var currentPosition = gameObject.transform.position;
+        for (var i = -remainingMovementPoints; i <= remainingMovementPoints; ++i)
+        {
+            for (var j = -remainingMovementPoints; j <= remainingMovementPoints; ++j)
+            {
+                if (i == 0 && j == 0) continue;
+
+                if (Math.Abs(i) + Math.Abs(j) <= remainingMovementPoints)
+                {
+                    var vector = currentPosition + new Vector3Int(i, 0, j);
+                    _walkableTiles.Add(vector);
+                    _walkableTileObjects[vector] = Instantiate(_walkableTilePrefab, vector, Quaternion.identity);
+                    if (!isPlayerControlled)
+                    {
+                        var renderer = _walkableTileObjects[vector].GetComponentInChildren<Renderer>();
+                        renderer.transform.position += new Vector3(0, 0.01f, 0);
+                        renderer.material = _attackableMaterial;
+                    }
+                }
+            }
         }
     }
 
@@ -222,9 +233,10 @@ public class Unit : MonoBehaviour
         }
         else
         {
+            var remainingEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length - 1;
             Destroy(unit);
 
-            if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
+            if (remainingEnemies == 0)
             {
                 SceneManager.LoadScene("GameWonScene");
             }

@@ -131,6 +131,6 @@ MonoBehaviour:
   unitName: e1
   movementPoints: 3
   isPlayerControlled: 0
-  _walkableTilePrefab: {fileID: 0}
+  _walkableTilePrefab: {fileID: 5482680452895440697, guid: 7d54d733cb27f47028e1b4e13ed6f1d1, type: 3}
   _litMaterial: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   _attackableMaterial: {fileID: 2100000, guid: 5c7e816b1a4f6432d975b130617ad636, type: 2}

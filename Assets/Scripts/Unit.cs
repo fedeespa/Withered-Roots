@@ -332,7 +332,7 @@ public class Unit : MonoBehaviour
 
     public void EndTurn()
     {
-        if (!_currentlyUnitTurn) return;
+        if (!_currentlyUnitTurn || _isInteractingWithCell != null) return;
 
         if (isPlayerControlled)
         {

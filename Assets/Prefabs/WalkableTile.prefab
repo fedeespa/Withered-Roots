@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5758962924840675975}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WalkableTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 2028159490823502158}
   - component: {fileID: 8225518089264917987}
   - component: {fileID: 3170403473963176017}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

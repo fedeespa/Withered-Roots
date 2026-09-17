@@ -16,6 +16,9 @@ public class Unit : MonoBehaviour
     [SerializeField]
     private bool isPlayerControlled; // Para saber si habilitar clicks o usar IA
 
+    [Header("Configuración de Capas y Obstáculos")]
+    [SerializeField] private LayerMask obstacleLayer; // Asigna la capa "Obstacles" en el Inspector
+
     private TurnManager turnManager;
     private bool _currentlyUnitTurn = false;
     [SerializeField] private GameObject _walkableTilePrefab;
@@ -38,7 +41,7 @@ public class Unit : MonoBehaviour
 
     void Start()
     {
-        RotateToPlayer();
+        StartCoroutine(RotateToPlayer());
     }
 
     public bool GetIsPlayerControlled()
@@ -61,9 +64,6 @@ public class Unit : MonoBehaviour
             _remainingMovementPoints = movementPoints;
             UpdateRemainingMovement();
             return;
-            // turnManager.EndCurrentTurn();
-            // 1. Mostrar casillas a las que se puede mover (Grilla)
-            // 2. Habilitar la selección de objetivos para atacar
         }
         else
         {
@@ -102,8 +102,15 @@ public class Unit : MonoBehaviour
             {
                 enemy.GetComponent<Unit>().BecomeLit();
             }
-
         }
+    }
+
+    /// <summary>
+    /// Comprueba mediante física si la casilla destino está libre de obstáculos.
+    /// </summary>
+    public bool IsCellWalkable(Vector3 targetPosition)
+    {
+        return !Physics.CheckSphere(targetPosition, 0.4f, obstacleLayer);
     }
 
     public void ShowWalkableTiles(int? totalMovementPoints = null)
@@ -120,13 +127,18 @@ public class Unit : MonoBehaviour
                 if (Math.Abs(i) + Math.Abs(j) <= remainingMovementPoints)
                 {
                     var vector = currentPosition + new Vector3Int(i, 0, j);
-                    _walkableTiles.Add(vector);
-                    _walkableTileObjects[vector] = Instantiate(_walkableTilePrefab, vector, Quaternion.identity);
-                    if (!isPlayerControlled)
+
+                    // Solo genera e incluye la casilla si NO hay obstáculos
+                    if (IsCellWalkable(vector))
                     {
-                        var renderer = _walkableTileObjects[vector].GetComponentInChildren<Renderer>();
-                        renderer.transform.position += new Vector3(0, 0.01f, 0);
-                        renderer.material = _attackableMaterial;
+                        _walkableTiles.Add(vector);
+                        _walkableTileObjects[vector] = Instantiate(_walkableTilePrefab, vector, Quaternion.identity);
+                        if (!isPlayerControlled)
+                        {
+                            var renderer = _walkableTileObjects[vector].GetComponentInChildren<Renderer>();
+                            renderer.transform.position += new Vector3(0, 0.01f, 0);
+                            renderer.material = _attackableMaterial;
+                        }
                     }
                 }
             }
@@ -146,47 +158,30 @@ public class Unit : MonoBehaviour
 
     public IEnumerator GetClosestReachable(Vector3 target)
     {
-        var start = transform.position;
-        int dx = (int)(target.x - start.x);
-        int dz = (int)(target.z - start.z);
-        int distance = Mathf.Abs(dx) + Mathf.Abs(dz);
+        // Pathfinding para trazar la ruta del enemigo rodeando obstáculos
+        List<Vector3> fullPath = FindPath(transform.position, target);
 
-        if (distance == 1)
+        if (fullPath.Count == 1)
         {
             yield return StartCoroutine(AttackUnit(GameObject.FindGameObjectWithTag("Player")));
             yield break;
         }
 
-        if (distance > movementPoints)
+        if (fullPath.Count > 0)
         {
-            int stepX = Mathf.Clamp(dx, -movementPoints, movementPoints);
-            int remaining = movementPoints - Mathf.Abs(stepX);
-            int stepZ = Mathf.Clamp(dz, -remaining, remaining);
+            int stepsToTake = Mathf.Min(movementPoints, fullPath.Count - 1);
 
-            var targetLocation = new Vector3Int((int)start.x + stepX, 0, (int)start.z + stepZ);
-
-            yield return StartCoroutine(MoveToCell(targetLocation));
-
-            if (distance - movementPoints == 1)
+            if (stepsToTake > 0)
             {
-                yield return StartCoroutine(AttackUnit(GameObject.FindGameObjectWithTag("Player")));
+                Vector3Int destinationCell = Vector3Int.FloorToInt(fullPath[stepsToTake - 1]);
+                yield return StartCoroutine(MoveToCell(destinationCell));
             }
 
-            yield break;
-        }
-
-        if (distance > 0)
-        {
-            int stepsToTake = distance - 1;
-
-            int stepX = Mathf.Clamp(dx, -stepsToTake, stepsToTake);
-            int remaining = stepsToTake - Mathf.Abs(stepX);
-            int stepZ = Mathf.Clamp(dz, -remaining, remaining);
-
-            var targetLocation = new Vector3Int((int)start.x + stepX, 0, (int)start.z + stepZ);
-
-            yield return StartCoroutine(MoveToCell(targetLocation));
-            yield return StartCoroutine(AttackUnit(GameObject.FindGameObjectWithTag("Player")));
+            var player = GameObject.FindGameObjectWithTag("Player");
+            if (player != null && DistanceToUnitPosition(player.transform.position) <= 1)
+            {
+                yield return StartCoroutine(AttackUnit(player));
+            }
         }
     }
 
@@ -253,28 +248,76 @@ public class Unit : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Calcula la mejor ruta paso a paso (BFS) evitando las casillas con obstáculos.
+    /// </summary>
+    private List<Vector3> FindPath(Vector3 start, Vector3 target)
+    {
+        Queue<Vector3> queue = new Queue<Vector3>();
+        Dictionary<Vector3, Vector3> cameFrom = new Dictionary<Vector3, Vector3>();
+
+        queue.Enqueue(start);
+        cameFrom[start] = start;
+
+        Vector3[] directions = { Vector3.forward, Vector3.back, Vector3.left, Vector3.right };
+
+        while (queue.Count > 0)
+        {
+            Vector3 current = queue.Dequeue();
+
+            if (Vector3.Distance(current, target) < 0.1f) break;
+
+            foreach (Vector3 dir in directions)
+            {
+                Vector3 next = current + dir;
+
+                if (!cameFrom.ContainsKey(next) && (IsCellWalkable(next) || Vector3.Distance(next, target) < 0.1f))
+                {
+                    queue.Enqueue(next);
+                    cameFrom[next] = current;
+                }
+            }
+        }
+
+        List<Vector3> path = new List<Vector3>();
+        Vector3 currNode = target;
+
+        while (currNode != start && cameFrom.ContainsKey(currNode))
+        {
+            path.Add(currNode);
+            currNode = cameFrom[currNode];
+        }
+
+        path.Reverse();
+        return path;
+    }
+
     public IEnumerator MoveToCell(Vector3Int cell)
     {
         if (!_currentlyUnitTurn || (isPlayerControlled && !_walkableTiles.Contains(cell))) yield break;
 
         _isInteractingWithCell = cell;
-        Vector3 start = transform.position;
 
-        // Smoothly move over the specified duration
-        while (Vector3.Distance(transform.position, cell) > 0.001f)
+        // Trazar ruta libre de obstáculos mediante Pathfinding
+        List<Vector3> path = FindPath(transform.position, cell);
+
+        foreach (Vector3 targetNode in path)
         {
-            transform.position = Vector3.MoveTowards(
-                transform.position,
-                cell,
-                SPEED * Time.deltaTime
-            );
-            yield return null;
+            while (Vector3.Distance(transform.position, targetNode) > 0.001f)
+            {
+                transform.position = Vector3.MoveTowards(
+                    transform.position,
+                    targetNode,
+                    SPEED * Time.deltaTime
+                );
+                yield return null;
+            }
+
+            transform.position = targetNode;
         }
 
-        // Snap to exact position to avoid floating point errors
-        transform.position = cell;
         _isInteractingWithCell = null;
-        _remainingMovementPoints = _remainingMovementPoints - (int)Math.Abs(start.x - cell.x) - (int)Math.Abs(start.z - cell.z);
+        _remainingMovementPoints -= path.Count;
 
         if (isPlayerControlled)
         {

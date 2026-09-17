@@ -2,6 +2,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -57,5 +58,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    OnCollisionEnter
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Portal"))
+        {
+            SceneManager.LoadScene("CombatScene");
+        }
+    }
 }

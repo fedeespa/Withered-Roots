@@ -1,13 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(Renderer))]
 public class Unit : MonoBehaviour
 {
     [SerializeField]
@@ -16,6 +12,7 @@ public class Unit : MonoBehaviour
     private int movementPoints;
     private int _remainingMovementPoints;
     private bool isAlive = true;
+    public bool blockRotation = false;
     [SerializeField]
     private bool isPlayerControlled; // Para saber si habilitar clicks o usar IA
 
@@ -38,14 +35,22 @@ public class Unit : MonoBehaviour
         GameObject tmObj = GameObject.FindGameObjectWithTag("Manager");
         turnManager = tmObj.GetComponent<TurnManager>();
     }
+
+    void Start()
+    {
+        RotateToPlayer();
+    }
+
     public bool GetIsPlayerControlled()
     {
         return isPlayerControlled;
     }
+
     public bool GetIsAlive()
     {
         return isAlive;
     }
+
     public void BeginTurn()
     {
         _currentlyUnitTurn = true;
@@ -200,8 +205,11 @@ public class Unit : MonoBehaviour
 
         foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
-            if (enemy.transform.position == cell && DistanceToUnitPosition(enemy.transform.position) <= 1)
+            var enemyPosition = Vector3Int.FloorToInt(enemy.transform.position);
+            Debug.Log($"Enemy Position {enemyPosition} {cell}");
+            if (enemyPosition == cell && DistanceToUnitPosition(enemyPosition) <= 1)
             {
+                Debug.Log($"Attacking Enemy");
                 _isInteractingWithCell = cell;
                 StartCoroutine(AttackUnit(enemy));
                 return;
@@ -213,7 +221,9 @@ public class Unit : MonoBehaviour
 
     public IEnumerator AttackUnit(GameObject unit)
     {
-        var target = Quaternion.Euler(-90, 0, 0);
+        unit.GetComponent<Unit>().blockRotation = true;
+        var target = Quaternion.LookRotation(-Vector3.down, -unit.transform.forward);
+        Debug.Log($"Rotating to {target}");
         while (Quaternion.Angle(unit.transform.rotation, target) > 0.01f)
         {
             unit.transform.rotation = Quaternion.RotateTowards(
@@ -224,7 +234,7 @@ public class Unit : MonoBehaviour
             yield return null;
         }
 
-        unit.transform.rotation = target; // snap to exact
+        unit.transform.rotation = target;
         _isInteractingWithCell = null;
 
         if (unit.GetComponent<Unit>().GetIsPlayerControlled())
@@ -270,6 +280,11 @@ public class Unit : MonoBehaviour
         {
             UpdateRemainingMovement();
         }
+
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            StartCoroutine(enemy.GetComponent<Unit>().RotateToPlayer());
+        }
     }
 
     public void EndTurn()
@@ -302,12 +317,34 @@ public class Unit : MonoBehaviour
 
     private void SetMaterial(Material material)
     {
-        Renderer rend = GetComponent<Renderer>();
+        Renderer rend = GetComponentInChildren<Renderer>();
         Material[] mats = new Material[rend.materials.Length];
         for (int i = 0; i < mats.Length; i++)
         {
             mats[i] = material;
         }
         rend.materials = mats;
+    }
+
+    public IEnumerator RotateToPlayer()
+    {
+        if (isPlayerControlled || blockRotation) yield break;
+
+        Vector3 direction = GameObject.FindGameObjectWithTag("Player").transform.position - transform.position;
+        direction.y = 0f;
+
+        var target = Quaternion.LookRotation(direction, Vector3.up);
+        while (Quaternion.Angle(transform.rotation, target) > 0.01f)
+        {
+            if (blockRotation) yield break;
+            transform.rotation = Quaternion.RotateTowards(
+                transform.rotation,
+                target,
+                ROTATE_SPEED * Time.deltaTime
+            );
+            yield return null;
+        }
+
+        transform.rotation = target;
     }
 }

@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Renderer))]
 public class Unit : MonoBehaviour
@@ -88,7 +90,7 @@ public class Unit : MonoBehaviour
 
                 if (Math.Abs(i) + Math.Abs(j) <= _remainingMovementPoints)
                 {
-                    var vector = currentPosition + new Vector3(i, 0, j);
+                    var vector = currentPosition + new Vector3Int(i, 0, j);
                     _walkableTiles.Add(vector);
                     _walkableTileObjects[vector] = Instantiate(_walkableTilePrefab, vector, Quaternion.identity);
                 }
@@ -97,8 +99,14 @@ public class Unit : MonoBehaviour
 
         foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
-            if (DistanceToUnitPosition(enemy.transform.position) <= _remainingMovementPoints + 1)
+            var enemyPosition = Vector3Int.FloorToInt(enemy.transform.position);
+            if (DistanceToUnitPosition(enemyPosition) <= _remainingMovementPoints + 1)
             {
+                if (_walkableTiles.Contains(enemyPosition))
+                {
+                    Destroy(_walkableTileObjects[enemyPosition]);
+                    _walkableTiles.Remove(enemyPosition);
+                }
                 enemy.GetComponent<Unit>().BecomeAttackable();
             }
             else
@@ -112,7 +120,6 @@ public class Unit : MonoBehaviour
     private IEnumerator ExecuteEnemyAI()
     {
         var player = GameObject.FindGameObjectWithTag("Player");
-        Debug.Log($"Player exists {player != null}");
         if (player != null)
         {
             yield return StartCoroutine(GetClosestReachable(player.transform.position));
@@ -125,10 +132,14 @@ public class Unit : MonoBehaviour
     {
         var start = transform.position;
         int dx = (int)(target.x - start.x);
-        int dz = (int)(target.y - start.y);
+        int dz = (int)(target.z - start.z);
         int distance = Mathf.Abs(dx) + Mathf.Abs(dz);
 
-        Debug.Log($"Distance {distance} of {movementPoints}");
+        if (distance == 1)
+        {
+            yield return StartCoroutine(AttackUnit(GameObject.FindGameObjectWithTag("Player")));
+            yield break;
+        }
 
         if (distance > movementPoints)
         {
@@ -138,7 +149,6 @@ public class Unit : MonoBehaviour
 
             var targetLocation = new Vector3Int((int)start.x + stepX, 0, (int)start.z + stepZ);
 
-            Debug.Log($"MoveTo {targetLocation}");
             yield return StartCoroutine(MoveToCell(targetLocation));
 
             if (distance - movementPoints == 1)
@@ -159,7 +169,6 @@ public class Unit : MonoBehaviour
 
             var targetLocation = new Vector3Int((int)start.x + stepX, 0, (int)start.z + stepZ);
 
-            Debug.Log($"MoveTo2 {targetLocation}");
             yield return StartCoroutine(MoveToCell(targetLocation));
             yield return StartCoroutine(AttackUnit(GameObject.FindGameObjectWithTag("Player")));
         }
@@ -205,14 +214,26 @@ public class Unit : MonoBehaviour
         }
 
         unit.transform.rotation = target; // snap to exact
-
-        Destroy(unit);
         _isInteractingWithCell = null;
+
+        if (unit.GetComponent<Unit>().GetIsPlayerControlled())
+        {
+            SceneManager.LoadScene("GameOverScene");
+        }
+        else
+        {
+            Destroy(unit);
+
+            if (GameObject.FindGameObjectsWithTag("Enemy").Length == 0)
+            {
+                SceneManager.LoadScene("GameWonScene");
+            }
+        }
     }
 
     public IEnumerator MoveToCell(Vector3Int cell)
     {
-        if (!_currentlyUnitTurn || !_walkableTiles.Contains(cell)) yield break;
+        if (!_currentlyUnitTurn || (isPlayerControlled && !_walkableTiles.Contains(cell))) yield break;
 
         _isInteractingWithCell = cell;
         Vector3 start = transform.position;

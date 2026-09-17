@@ -5,12 +5,12 @@ public class InputHandler : MonoBehaviour
 {
     public Grid grid;
     public LayerMask groundLayer;
+    public LayerMask enemyLayer;
 
     public void Update()
     {
         if (Mouse.current.rightButton.wasReleasedThisFrame)
         {
-            Debug.Log($"RightClick Released");
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
             foreach (var enemy in enemies)
             {
@@ -31,7 +31,6 @@ public class InputHandler : MonoBehaviour
 
             if (cell != null && player != null)
             {
-                Debug.Log($"Clicked cell: {cell}");
                 player.OnCellClicked(cell);
             }
         }
@@ -42,10 +41,17 @@ public class InputHandler : MonoBehaviour
         if (!context.started) return;
 
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
+        if (Physics.Raycast(ray, out RaycastHit enemyHit, 100f, enemyLayer))
+        {
+            var enemy = enemyHit.collider.gameObject;
+            enemy.GetComponent<Unit>().ShowWalkableTiles();
+            return;
+        }
+
+
         if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundLayer))
         {
             Vector3Int cell = grid.WorldToCell(hit.point);
-            Debug.Log($"RightClicked cell: {cell}");
             if (cell == null) return;
 
             GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
@@ -53,7 +59,6 @@ public class InputHandler : MonoBehaviour
             {
                 if (enemy.transform.position == cell)
                 {
-                    Debug.Log($"Found enemy at cell: {cell}");
                     enemy.GetComponent<Unit>().ShowWalkableTiles();
                     return;
                 }

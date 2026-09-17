@@ -56,4 +56,6 @@ public class PlayerController : MonoBehaviour
             jumpPressed = true;
         }
     }
+
+    OnCollisionEnter
 }

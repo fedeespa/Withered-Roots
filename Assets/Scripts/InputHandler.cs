@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,8 +6,6 @@ public class InputHandler : MonoBehaviour
     public Grid grid;
     public LayerMask groundLayer;
     public LayerMask enemyLayer;
-
-    [SerializeField] CameraController cameraController;
 
     public void Update()
     {
@@ -19,12 +16,6 @@ public class InputHandler : MonoBehaviour
             {
                 enemy.GetComponent<Unit>().DestroyWalkableTiles();
             }
-        }
-
-        if (Mouse.current.rightButton.isPressed)
-        {
-            Vector2 delta = Mouse.current.delta.ReadValue();
-            cameraController.ApplyTransform(delta.x);
         }
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,10 +15,9 @@ public class Unit : MonoBehaviour
     public bool isAlive = true;
     public bool blockRotation = false;
     [SerializeField]
-    private bool isPlayerControlled; // Para saber si habilitar clicks o usar IA
+    private bool isPlayerControlled;
 
-    [Header("Configuración de Capas y Obstáculos")]
-    [SerializeField] private LayerMask obstacleLayer; // Asigna la capa "Obstacles" en el Inspector
+    [SerializeField] private LayerMask obstacleLayer;
 
     private TurnManager turnManager;
     private bool _currentlyUnitTurn = false;

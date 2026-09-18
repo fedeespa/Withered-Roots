@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
-    public float jumpHeight = 2f;
+    public float jumpHeight = 1f;
 
     private CharacterController controller;
     private Vector2 input;

@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public float speed = 5f;
-    public float jumpHeight = 1f;
+    public float jumpHeight = 0.25f;
 
     private CharacterController controller;
     private Vector2 input;
@@ -31,7 +31,7 @@ public class PlayerController : MonoBehaviour
 
         if (jumpPressed && isGrounded)
         {
-            verticalVelocity = (float)Math.Sqrt(jumpHeight * -2f * -Physics.gravity.magnitude);
+            verticalVelocity = (float)Math.Sqrt(jumpHeight * Physics.gravity.magnitude);
             jumpPressed = false;
         }
 

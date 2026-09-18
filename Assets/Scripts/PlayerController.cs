@@ -1,4 +1,5 @@
 using System;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +15,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 input;
     private bool jumpPressed;
     private float verticalVelocity;
+
+    [SerializeField] private CinemachineOrbitalFollow orbitalFollow;
 
     void Start()
     {
@@ -31,18 +34,24 @@ public class PlayerController : MonoBehaviour
 
         if (jumpPressed && isGrounded)
         {
-            verticalVelocity = (float)Math.Sqrt(jumpHeight * -2f * -Physics.gravity.magnitude);
+            verticalVelocity = (float)Math.Sqrt(jumpHeight * Physics.gravity.magnitude);
             jumpPressed = false;
         }
 
         verticalVelocity += -Physics.gravity.magnitude * Time.deltaTime;
 
-        var move = new Vector3(input.x, 0, input.y)
-        {
-            y = verticalVelocity / speed
-        };
+        float yawRad = orbitalFollow.HorizontalAxis.Value * Mathf.Deg2Rad;
+
+        Vector3 camForward = new(Mathf.Sin(yawRad), 0f, Mathf.Cos(yawRad));
+        Vector3 camRight = new(Mathf.Cos(yawRad), 0f, -Mathf.Sin(yawRad));
+
+        Vector3 worldMove = camForward * input.y + camRight * input.x;
+
+        var move = new Vector3(worldMove.x, verticalVelocity / speed, worldMove.z);
 
         controller.Move(speed * Time.deltaTime * move);
+
+        transform.rotation = Quaternion.Euler(0, orbitalFollow.HorizontalAxis.Value, 0);
     }
 
     public void OnMove(InputValue value)

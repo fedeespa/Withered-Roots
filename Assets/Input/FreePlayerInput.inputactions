@@ -32,6 +32,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "e2318d24-9136-4634-9afa-2c138e05028e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -52,7 +61,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";MouseKeyboard",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -63,7 +72,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";MouseKeyboard",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -74,7 +83,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";MouseKeyboard",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -85,7 +94,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";MouseKeyboard",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -96,7 +105,7 @@
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";MouseKeyboard",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -107,8 +116,19 @@
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";MouseKeyboard",
                     "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bd9108cd-4d9f-436b-98ba-14090da0ab22",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";MouseKeyboard",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

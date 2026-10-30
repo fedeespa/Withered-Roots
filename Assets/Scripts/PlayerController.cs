@@ -8,6 +8,9 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GameObject chestText;
+    private Chest _chest;
+
     public float speed = 5f;
     public float jumpHeight = 0.25f;
 
@@ -67,11 +70,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void OnInteract(InputValue value)
+    {
+        if (_chest != null)
+        {
+            _chest.Open();
+            _chest = null;
+            chestText.SetActive(false);
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Portal"))
         {
             SceneManager.LoadScene("CombatScene");
+            return;
+        }
+
+        if (other.CompareTag("Chest"))
+        {
+            _chest = other.GetComponentInParent<Chest>();
+            chestText.SetActive(true);
+            return;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Chest"))
+        {
+            _chest = null;
+            chestText.SetActive(false);
+            return;
         }
     }
 }

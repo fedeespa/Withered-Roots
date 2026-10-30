@@ -5,12 +5,12 @@ public class StartGameButton : MonoBehaviour
 {
     public void StartGame()
     {
-        SceneManager.LoadScene("LevelScene");
+        SceneManager.LoadScene("CombatScene");
     }
 
-
-    public void RestartCombat()
+    public void GoToLevelScene()
     {
-        SceneManager.LoadScene("CombatScene");
+        Debug.Log("GoToLevelScene");
+        SceneManager.LoadScene("LevelScene");
     }
 }

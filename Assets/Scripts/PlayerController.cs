@@ -21,9 +21,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private CinemachineOrbitalFollow orbitalFollow;
 
+    [SerializeField] private Animator animator;
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        
     }
 
     void Update()
@@ -55,7 +57,23 @@ public class PlayerController : MonoBehaviour
         controller.Move(speed * Time.deltaTime * move);
 
         transform.rotation = Quaternion.Euler(0, orbitalFollow.HorizontalAxis.Value, 0);
+        
+        if (worldMove.sqrMagnitude > 0.01f)
+        {
+            
+            float targetAngle = Mathf.Atan2(worldMove.x, worldMove.z) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(0, targetAngle, 0);
+
+            
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 15f * Time.deltaTime);
+        }
+        float moveAmount = Mathf.Clamp01(input.magnitude);
+        if (animator != null)
+        {
+            animator.SetFloat("speed", moveAmount);
+        }
     }
+
 
     public void OnMove(InputValue value)
     {

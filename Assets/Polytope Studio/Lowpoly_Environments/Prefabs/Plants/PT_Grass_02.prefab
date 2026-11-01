@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 279674049265579943}
   - component: {fileID: 5391961225124459694}
   - component: {fileID: 1309944978084627218}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PT_Grass_02_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -58,6 +58,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,9 +84,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &3941905813175756431
 GameObject:
@@ -94,7 +101,7 @@ GameObject:
   - component: {fileID: 7442711440568689961}
   - component: {fileID: 7088410758827092112}
   - component: {fileID: 5828874672928699267}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PT_Grass_02_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,6 +148,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -162,9 +174,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4431629511752406189
 GameObject:
@@ -177,7 +191,7 @@ GameObject:
   - component: {fileID: 6119579431137445377}
   - component: {fileID: 8043189345720651878}
   - component: {fileID: 941673656794352374}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PT_Grass_02_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,6 +238,11 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -245,9 +264,11 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &6739804228592001243
 GameObject:
@@ -259,7 +280,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6251920492078742113}
   - component: {fileID: 1196083080072793360}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PT_Grass_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -294,7 +315,7 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: -0.11682665, y: 0.33101153, z: -0.1027852}
   m_Size: 1.2406445
-  m_FadeMode: 0
+  m_FadeMode: 1
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1268050992877243359}
   - component: {fileID: 6323926895507881134}
   - component: {fileID: 7699852510878620691}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PT_Pine_Tree_03_dead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,7 +46,7 @@ LODGroup:
   serializedVersion: 2
   m_LocalReferencePoint: {x: 0.032800674, y: 3.9897761, z: 0.01949501}
   m_Size: 9.0348425
-  m_FadeMode: 0
+  m_FadeMode: 1
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 2809133384829089810}
   - component: {fileID: 2927318667073144412}
   - component: {fileID: 728806381982184805}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PT_Pine_Tree_03_dead_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ GameObject:
   - component: {fileID: 5340731949621571375}
   - component: {fileID: 2617870471872453413}
   - component: {fileID: 4328895901199877293}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PT_Pine_Tree_03_dead_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 2534358327882011202}
   - component: {fileID: 6272690288195183828}
   - component: {fileID: 7058119992877278399}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PT_Pine_Tree_03_dead_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

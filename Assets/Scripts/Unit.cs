@@ -7,13 +7,16 @@ using UnityEngine.SceneManagement;
 
 public class Unit : MonoBehaviour
 {
+    
     private static readonly int IsMovingHash = Animator.StringToHash("IsMoving");
     private static readonly int AttackHash = Animator.StringToHash("Attack");
     private static readonly int DieHash = Animator.StringToHash("Die");
-
+    private Animator _animator;
     private const float TURN_SPEED = 540f;
     [SerializeField]
-    private string unitName;
+    private float attackDuration = 1f;
+    [SerializeField]
+    private float deathDuration = 1.5f;
     [SerializeField]
     private int movementPoints;
     private int _remainingMovementPoints;
@@ -31,12 +34,11 @@ public class Unit : MonoBehaviour
     private Dictionary<Vector3, GameObject> _walkableTileObjects = new();
 
     public Grid grid;
-    private const float gridSize = 1.0f;
     private const float SPEED = 5f;
     private const float ROTATE_SPEED = 180f;
     private Vector3Int? _isInteractingWithCell;
 
-    private Animator _animator;
+
     [SerializeField] private Material _litMaterial;
     [SerializeField] private Material _attackableMaterial;
 
@@ -71,7 +73,6 @@ public class Unit : MonoBehaviour
         }
         else
         {
-            // Ejecutar Inteligencia Artificial del enemigo
             StartCoroutine(ExecuteEnemyAI());
         }
     }
@@ -165,7 +166,6 @@ public class Unit : MonoBehaviour
         {
             yield return StartCoroutine(GetClosestReachable(player.transform.position));
         }
-        Debug.Log("Ending Turn");
         EndTurn();
     }
 
@@ -213,7 +213,6 @@ public class Unit : MonoBehaviour
         foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
             var enemyPosition = Vector3Int.FloorToInt(enemy.transform.position);
-            Debug.Log($"Enemy Position {enemyPosition} {cell}");
             if (enemyPosition == cell && DistanceToUnitPosition(enemyPosition) <= 1)
             {
                 
@@ -228,31 +227,44 @@ public class Unit : MonoBehaviour
 
     public IEnumerator AttackUnit(GameObject unit)
     {
-        unit.GetComponent<Unit>().blockRotation = true;
-        var target = Quaternion.LookRotation(-Vector3.down, -unit.transform.forward);
-        
-        while (Quaternion.Angle(unit.transform.rotation, target) > 0.01f)
-        {
-            unit.transform.rotation = Quaternion.RotateTowards(
-                unit.transform.rotation,
-                target,
-                ROTATE_SPEED * Time.deltaTime
-            );
-            yield return null;
-        }
+        var entity = unit.GetComponent<Unit>();
+        entity.blockRotation = true;
 
-        unit.transform.rotation = target;
+
+        Vector3 dir = unit.transform.position - transform.position;
+        dir.y = 0f;
+        if (dir.sqrMagnitude > 0.001f)
+            transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
+
+    
+        if (_animator != null) _animator.SetTrigger(AttackHash);
+        yield return new WaitForSeconds(attackDuration);
+
+ 
+        entity.isAlive = false;
+        entity.PlayDeath();
+        if (isPlayerControlled)
+        {
+            yield return new WaitForSeconds(deathDuration);
+        }
+        else
+        {
+            yield return new WaitForSeconds(deathDuration+1.5f);
+        }   
         _isInteractingWithCell = null;
 
-        var entity = unit.GetComponent<Unit>();
         if (entity.GetIsPlayerControlled())
         {
             SceneManager.LoadScene("GameOverScene");
         }
         else
         {
-          
-            var remainingEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length - 1;
+            int remainingEnemies = 0;
+            foreach (var e in GameObject.FindGameObjectsWithTag("Enemy"))
+            {
+                if (e != unit && e.GetComponent<Unit>().isAlive) remainingEnemies++;
+            }
+
             Destroy(unit);
 
             if (remainingEnemies == 0)
@@ -261,12 +273,16 @@ public class Unit : MonoBehaviour
             }
             else
             {
-                entity.isAlive = false;
+                if (isPlayerControlled) transform.rotation = _forwardRotation;
                 UpdateRemainingMovement();
             }
         }
     }
 
+    public void PlayDeath()
+    {
+        if (_animator != null) _animator.SetTrigger(DieHash);
+    }
     private List<Vector3> FindPath(Vector3 start, Vector3 target)
     {
         Queue<Vector3> queue = new Queue<Vector3>();

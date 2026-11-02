@@ -5544,6 +5544,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 603430786094746478, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
+      propertyPath: unitName
+      value: e5
+      objectReference: {fileID: 0}
     - target: {fileID: 4901239301758732250, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7
@@ -5586,7 +5590,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_Name
-      value: Enemy (4)
+      value: Enemy5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5601,6 +5605,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 603430786094746478, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
+      propertyPath: unitName
+      value: e6
+      objectReference: {fileID: 0}
     - target: {fileID: 4901239301758732250, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4
@@ -5643,7 +5651,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_Name
-      value: Enemy (5)
+      value: Enemy6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11407,6 +11415,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 603430786094746478, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
+      propertyPath: unitName
+      value: e3
+      objectReference: {fileID: 0}
     - target: {fileID: 4901239301758732250, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
@@ -11449,7 +11461,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_Name
-      value: Enemy (2)
+      value: Enemy3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11673,6 +11685,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 603430786094746478, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
+      propertyPath: unitName
+      value: e4
+      objectReference: {fileID: 0}
     - target: {fileID: 4901239301758732250, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1
@@ -11715,7 +11731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_Name
-      value: Enemy (3)
+      value: Enemy4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -14003,6 +14019,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 603430786094746478, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
+      propertyPath: unitName
+      value: e2
+      objectReference: {fileID: 0}
     - target: {fileID: 4901239301758732250, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4
@@ -14045,7 +14065,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_Name
-      value: Enemy (1)
+      value: Enemy2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -22370,7 +22390,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_Name
-      value: Enemy
+      value: Enemy1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

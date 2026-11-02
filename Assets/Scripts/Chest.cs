@@ -4,10 +4,12 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 
 [RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(AudioSource))]
 public class Chest : MonoBehaviour
 {
     [SerializeField] private GameObject _chestTop;
     [SerializeField] private GameObject _chestBottom;
+    [SerializeField] private ParticleSystem _particleSystem;
 
     public async void Open()
     {
@@ -16,8 +18,10 @@ public class Chest : MonoBehaviour
         DisableEmission(_chestBottom);
 
         await Task.Delay(1000);
-        StartCoroutine(FadeOutRoutine(_chestTop));
-        StartCoroutine(FadeOutRoutine(_chestBottom));
+        _particleSystem.Stop();
+        StartCoroutine(FadeOutCoroutine(_chestTop));
+        StartCoroutine(FadeOutCoroutine(_chestBottom));
+        StartCoroutine(FadeOutCoroutine(GetComponent<AudioSource>()));
     }
 
     private void DisableEmission(GameObject gameObject)
@@ -48,7 +52,7 @@ public class Chest : MonoBehaviour
         _chestTop.transform.localEulerAngles = new(-90f, 0f, 0f);
     }
 
-    private IEnumerator FadeOutRoutine(GameObject gameObject)
+    private IEnumerator FadeOutCoroutine(GameObject gameObject)
     {
         float t = 0f;
 
@@ -61,5 +65,21 @@ public class Chest : MonoBehaviour
         }
 
         gameObject.SetActive(false);
+    }
+
+    private IEnumerator FadeOutCoroutine(AudioSource audioSource)
+    {
+        float startVolume = audioSource.volume;
+        float elapsed = 0f;
+        float duration = 5f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, elapsed / duration);
+            yield return null;
+        }
+
+        audioSource.volume = 0f;
+        audioSource.Stop();
     }
 }

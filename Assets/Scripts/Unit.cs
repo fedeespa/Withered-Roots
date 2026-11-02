@@ -7,6 +7,11 @@ using UnityEngine.SceneManagement;
 
 public class Unit : MonoBehaviour
 {
+    private static readonly int IsMovingHash = Animator.StringToHash("IsMoving");
+    private static readonly int AttackHash = Animator.StringToHash("Attack");
+    private static readonly int DieHash = Animator.StringToHash("Die");
+
+    private const float TURN_SPEED = 540f;
     [SerializeField]
     private string unitName;
     [SerializeField]
@@ -31,13 +36,17 @@ public class Unit : MonoBehaviour
     private const float ROTATE_SPEED = 180f;
     private Vector3Int? _isInteractingWithCell;
 
+    private Animator _animator;
     [SerializeField] private Material _litMaterial;
     [SerializeField] private Material _attackableMaterial;
 
+    private Quaternion _forwardRotation;
     void Awake()
     {
         GameObject tmObj = GameObject.FindGameObjectWithTag("Manager");
         turnManager = tmObj.GetComponent<TurnManager>();
+        _animator = GetComponentInChildren<Animator>();
+        _forwardRotation = transform.rotation;
     }
 
     void Start()
@@ -53,7 +62,6 @@ public class Unit : MonoBehaviour
     public void BeginTurn()
     {
         _currentlyUnitTurn = true;
-        Debug.Log("Es el turno de: " + unitName);
 
         if (isPlayerControlled)
         {
@@ -163,7 +171,6 @@ public class Unit : MonoBehaviour
 
     public IEnumerator GetClosestReachable(Vector3 target)
     {
-        // Pathfinding para trazar la ruta del enemigo rodeando obstáculos
         List<Vector3> fullPath = FindPath(transform.position, target);
 
         if (fullPath.Count == 1)
@@ -209,7 +216,7 @@ public class Unit : MonoBehaviour
             Debug.Log($"Enemy Position {enemyPosition} {cell}");
             if (enemyPosition == cell && DistanceToUnitPosition(enemyPosition) <= 1)
             {
-                Debug.Log($"Attacking Enemy");
+                
                 _isInteractingWithCell = cell;
                 StartCoroutine(AttackUnit(enemy));
                 return;
@@ -223,7 +230,7 @@ public class Unit : MonoBehaviour
     {
         unit.GetComponent<Unit>().blockRotation = true;
         var target = Quaternion.LookRotation(-Vector3.down, -unit.transform.forward);
-        Debug.Log($"Rotating to {target}");
+        
         while (Quaternion.Angle(unit.transform.rotation, target) > 0.01f)
         {
             unit.transform.rotation = Quaternion.RotateTowards(
@@ -244,6 +251,7 @@ public class Unit : MonoBehaviour
         }
         else
         {
+          
             var remainingEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length - 1;
             Destroy(unit);
 
@@ -308,11 +316,24 @@ public class Unit : MonoBehaviour
 
         // Trazar ruta libre de obstáculos mediante Pathfinding
         List<Vector3> path = FindPath(transform.position, cell);
+        if (_animator != null && isPlayerControlled) _animator.SetBool(IsMovingHash, true);
 
         foreach (Vector3 targetNode in path)
         {
+            Vector3 dir = targetNode - transform.position;
+            dir.y = 0f;
+            Quaternion targetRotation = dir.sqrMagnitude > 0.001f
+                ? Quaternion.LookRotation(dir, Vector3.up)
+                : transform.rotation;
+
             while (Vector3.Distance(transform.position, targetNode) > 0.001f)
             {
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    targetRotation,
+                    TURN_SPEED * Time.deltaTime
+                );
+
                 transform.position = Vector3.MoveTowards(
                     transform.position,
                     targetNode,
@@ -323,7 +344,20 @@ public class Unit : MonoBehaviour
 
             transform.position = targetNode;
         }
-
+        if (_animator != null && isPlayerControlled) _animator.SetBool(IsMovingHash, false);
+        if (isPlayerControlled)
+        {
+            while (Quaternion.Angle(transform.rotation, _forwardRotation) > 0.1f)
+            {
+                transform.rotation = Quaternion.RotateTowards(
+                    transform.rotation,
+                    _forwardRotation,
+                    TURN_SPEED * Time.deltaTime
+                );
+                yield return null;
+            }
+            transform.rotation = _forwardRotation;
+        }
         _isInteractingWithCell = null;
         _remainingMovementPoints -= path.Count;
 

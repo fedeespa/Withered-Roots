@@ -10,14 +10,19 @@ public class Chest : MonoBehaviour
     [SerializeField] private GameObject _chestBottom;
     [SerializeField] private ParticleSystem _particleSystem;
     [SerializeField] private AudioSource _openAudioSource;
+    private bool _isEnabled = true;
 
     public async void Open()
     {
+        if (!_isEnabled) return;
+        _isEnabled = true;
+
         StartCoroutine(RotateRoutine());
         DisableEmission(_chestTop);
         DisableEmission(_chestBottom);
-
         _openAudioSource.Play();
+        GameController.Instance.OnChestOpened();
+
         await Task.Delay(1000);
         _particleSystem.Stop();
         StartCoroutine(FadeOutCoroutine(_chestTop));

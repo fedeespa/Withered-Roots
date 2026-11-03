@@ -10,12 +10,12 @@ public class Torch : MonoBehaviour
         torchLight = GetComponentInChildren<Light>();
 
         if (torchLight != null) StartCoroutine(LightFlicker());
+        StartCoroutine(SparkRoutine());
     }
 
     IEnumerator LightFlicker()
     {
         float transitionDuration = 0.2f;
-        float changeInterval = 0.5f;
 
         while (true)
         {
@@ -38,5 +38,28 @@ public class Torch : MonoBehaviour
 
             yield return null;
         }
+    }
+
+    private IEnumerator SparkRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(1.0f, 0.05f));
+
+            PlaySpark();
+        }
+    }
+
+    private void PlaySpark()
+    {
+        AudioSource audioSource = GetComponentInChildren<AudioSource>();
+        AudioClip clip = audioSource.clip;
+        if (clip == null) return;
+
+        float volume = Random.Range(0.2f, 1f);
+        float pitch = Random.Range(0.5f, 1.5f);
+
+        audioSource.pitch = pitch;
+        audioSource.PlayOneShot(clip, volume);
     }
 }

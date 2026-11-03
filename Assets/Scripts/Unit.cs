@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class Unit : MonoBehaviour
 {
-    
+
     private static readonly int IsMovingHash = Animator.StringToHash("IsMoving");
     private static readonly int AttackHash = Animator.StringToHash("Attack");
     private static readonly int DieHash = Animator.StringToHash("Die");
@@ -49,6 +49,11 @@ public class Unit : MonoBehaviour
         turnManager = tmObj.GetComponent<TurnManager>();
         _animator = GetComponentInChildren<Animator>();
         _forwardRotation = transform.rotation;
+
+        if (isPlayerControlled && GameController.Instance != null)
+        {
+            movementPoints += GameController.Instance.ExtraMovementPoints();
+        }
     }
 
     void Start()
@@ -215,7 +220,7 @@ public class Unit : MonoBehaviour
             var enemyPosition = Vector3Int.FloorToInt(enemy.transform.position);
             if (enemyPosition == cell && DistanceToUnitPosition(enemyPosition) <= 1)
             {
-                
+
                 _isInteractingWithCell = cell;
                 StartCoroutine(AttackUnit(enemy));
                 return;
@@ -236,11 +241,11 @@ public class Unit : MonoBehaviour
         if (dir.sqrMagnitude > 0.001f)
             transform.rotation = Quaternion.LookRotation(dir, Vector3.up);
 
-    
+
         if (_animator != null) _animator.SetTrigger(AttackHash);
         yield return new WaitForSeconds(attackDuration);
 
- 
+
         entity.isAlive = false;
         entity.PlayDeath();
         if (isPlayerControlled)
@@ -249,8 +254,8 @@ public class Unit : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(deathDuration+1.5f);
-        }   
+            yield return new WaitForSeconds(deathDuration + 1.5f);
+        }
         _isInteractingWithCell = null;
 
         if (entity.GetIsPlayerControlled())

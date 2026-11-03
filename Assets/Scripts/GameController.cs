@@ -27,4 +27,6 @@ public class GameController : MonoBehaviour
     {
         _chestText.text = $"{++_chestsOpened} / {_totalChests}";
     }
+
+    public int ExtraMovementPoints() => _chestsOpened;
 }

@@ -834,7 +834,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1704717983}
         m_TargetAssemblyTypeName: StartGameButton, Assembly-CSharp
-        m_MethodName: StartGame
+        m_MethodName: GoToLevelScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

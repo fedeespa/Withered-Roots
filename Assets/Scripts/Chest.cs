@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
-[RequireComponent(typeof(SpriteRenderer))]
 
 [RequireComponent(typeof(Renderer))]
 [RequireComponent(typeof(AudioSource))]
@@ -10,6 +9,7 @@ public class Chest : MonoBehaviour
     [SerializeField] private GameObject _chestTop;
     [SerializeField] private GameObject _chestBottom;
     [SerializeField] private ParticleSystem _particleSystem;
+    [SerializeField] private AudioSource _openAudioSource;
 
     public async void Open()
     {
@@ -17,6 +17,7 @@ public class Chest : MonoBehaviour
         DisableEmission(_chestTop);
         DisableEmission(_chestBottom);
 
+        _openAudioSource.Play();
         await Task.Delay(1000);
         _particleSystem.Stop();
         StartCoroutine(FadeOutCoroutine(_chestTop));

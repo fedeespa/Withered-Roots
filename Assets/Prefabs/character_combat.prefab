@@ -248,7 +248,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 53b11f6e31cc9804686986143cf339c3, type: 3}
       propertyPath: m_Name
-      value: character 1
+      value: character_combat
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 53b11f6e31cc9804686986143cf339c3, type: 3}
       propertyPath: m_TagString
@@ -347,7 +347,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e17a5619b207a3419ea0af784de42a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Unit
-  unitName: p1
+  attackDuration: 1
+  deathDuration: 1.5
   movementPoints: 5
   isAlive: 1
   blockRotation: 0

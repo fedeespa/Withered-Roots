@@ -2325,7 +2325,7 @@ GameObject:
   - component: {fileID: 5414528946179236719}
   - component: {fileID: 6785444259340794242}
   - component: {fileID: 639202853208253428}
-  - component: {fileID: 3974813282962314321}
+  - component: {fileID: 3825512638298105358}
   m_Layer: 0
   m_Name: Fog
   m_TagString: Portal
@@ -2405,8 +2405,8 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &3974813282962314321
-CapsuleCollider:
+--- !u!64 &3825512638298105358
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -2423,8 +2423,7 @@ CapsuleCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}

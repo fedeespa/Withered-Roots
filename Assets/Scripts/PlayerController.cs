@@ -2,8 +2,9 @@ using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-
 [RequireComponent(typeof(CharacterController))]
+
+[RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject chestText;
@@ -23,6 +24,12 @@ public class PlayerController : MonoBehaviour
     private bool jumped;
     private float airTimer;
     private float jumpDuration;
+
+
+    private const float stepInterval = 0.5f;
+    private const float pitchMin = 0.9f;
+    private const float pitchMax = 1.1f;
+    private float stepTimer;
 
     void Start()
     {
@@ -65,6 +72,21 @@ public class PlayerController : MonoBehaviour
 
         Vector3 velocity = worldMove * speed + Vector3.up * verticalVelocity;
         controller.Move(velocity * Time.deltaTime);
+
+        if (input.sqrMagnitude > 0.01f)
+        {
+            stepTimer -= Time.deltaTime;
+
+            if (stepTimer <= 0f)
+            {
+                PlayFootstep();
+                stepTimer = stepInterval;
+            }
+        }
+        else
+        {
+            stepTimer = 0f;
+        }
 
         // Rotar solo si hay movimiento
         if (worldMove.sqrMagnitude > 0.01f)
@@ -130,5 +152,12 @@ public class PlayerController : MonoBehaviour
             _chest = null;
             if (chestText != null) chestText.SetActive(false);
         }
+    }
+
+    private void PlayFootstep()
+    {
+        var audioSource = GetComponent<AudioSource>();
+        audioSource.pitch = Random.Range(pitchMin, pitchMax);
+        audioSource.PlayOneShot(audioSource.clip);
     }
 }

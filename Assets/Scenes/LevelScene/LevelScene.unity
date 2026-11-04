@@ -2007,7 +2007,7 @@ GameObject:
   - component: {fileID: 993805860}
   - component: {fileID: 993805859}
   m_Layer: 5
-  m_Name: OpenChestText
+  m_Name: OpenText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2052,7 +2052,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: <b>[E] Open Chest</b>
+  m_text: <b>[E] Open</b>
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2465,7 +2465,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -6279318157031232285, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 1215503a5b73f43edac945a52267566a, type: 3}
+  m_Resource: {fileID: 8300000, guid: e17582ec3b2b3422aa662bfe8294a9b6, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -2929,6 +2929,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 823167167092984576, guid: 643f1f935e6a9b543bda514bf1735bf0, type: 3}
+      propertyPath: openText
+      value: 
+      objectReference: {fileID: 993805857}
     - target: {fileID: 823167167092984576, guid: 643f1f935e6a9b543bda514bf1735bf0, type: 3}
       propertyPath: chestText
       value: 

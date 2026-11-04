@@ -38,6 +38,9 @@ public class Unit : MonoBehaviour
     private const float ROTATE_SPEED = 180f;
     private Vector3Int? _isInteractingWithCell;
 
+    [SerializeField] private AudioSource _attackSource;
+    [SerializeField] private AudioSource _walkSource;
+    private Coroutine _walkRoutine;
 
     [SerializeField] private Material _litMaterial;
     [SerializeField] private Material _attackableMaterial;
@@ -235,7 +238,6 @@ public class Unit : MonoBehaviour
         var entity = unit.GetComponent<Unit>();
         entity.blockRotation = true;
 
-
         Vector3 dir = unit.transform.position - transform.position;
         dir.y = 0f;
         if (dir.sqrMagnitude > 0.001f)
@@ -243,6 +245,14 @@ public class Unit : MonoBehaviour
 
 
         if (_animator != null) _animator.SetTrigger(AttackHash);
+        if (isPlayerControlled)
+        {
+            StartCoroutine(PunchRoutine());
+        }
+        else
+        {
+            _attackSource.Play();
+        }
         yield return new WaitForSeconds(attackDuration);
 
 
@@ -282,6 +292,29 @@ public class Unit : MonoBehaviour
                 UpdateRemainingMovement();
             }
         }
+    }
+
+    private IEnumerator PunchRoutine()
+    {
+        int punchesThrown = 0;
+        yield return new WaitForSeconds(0.2f);
+        while (punchesThrown++ < 3)
+        {
+            yield return new WaitForSeconds(0.3f);
+            PlayPunch();
+        }
+    }
+
+    private void PlayPunch()
+    {
+        AudioClip clip = _attackSource.clip;
+        if (clip == null) return;
+
+        float volume = UnityEngine.Random.Range(0.6f, 1f);
+        float pitch = UnityEngine.Random.Range(0.75f, 1.25f);
+
+        _attackSource.pitch = pitch;
+        _attackSource.PlayOneShot(clip, volume);
     }
 
     public void PlayDeath()
@@ -337,7 +370,11 @@ public class Unit : MonoBehaviour
 
         // Trazar ruta libre de obstáculos mediante Pathfinding
         List<Vector3> path = FindPath(transform.position, cell);
-        if (_animator != null && isPlayerControlled) _animator.SetBool(IsMovingHash, true);
+        if (_animator != null && isPlayerControlled)
+        {
+            _animator.SetBool(IsMovingHash, true);
+            _walkRoutine = StartCoroutine(WalkRoutine());
+        }
 
         foreach (Vector3 targetNode in path)
         {
@@ -365,7 +402,15 @@ public class Unit : MonoBehaviour
 
             transform.position = targetNode;
         }
-        if (_animator != null && isPlayerControlled) _animator.SetBool(IsMovingHash, false);
+        if (_animator != null && isPlayerControlled)
+        {
+            _animator.SetBool(IsMovingHash, false);
+            if (_walkRoutine != null)
+            {
+                StopCoroutine(_walkRoutine);
+                _walkRoutine = null;
+            }
+        }
         if (isPlayerControlled)
         {
             while (Quaternion.Angle(transform.rotation, _forwardRotation) > 0.1f)
@@ -391,6 +436,21 @@ public class Unit : MonoBehaviour
         {
             StartCoroutine(enemy.GetComponent<Unit>().RotateToPlayer());
         }
+    }
+
+    private IEnumerator WalkRoutine()
+    {
+        while (true)
+        {
+            PlayFootstep();
+            yield return new WaitForSeconds(0.5f);
+        }
+    }
+
+    private void PlayFootstep()
+    {
+        _walkSource.pitch = UnityEngine.Random.Range(0.8f, 1.2f);
+        _walkSource.PlayOneShot(_walkSource.clip);
     }
 
     public void EndTurn()

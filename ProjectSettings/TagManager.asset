@@ -8,6 +8,7 @@ TagManager:
   - Manager
   - Portal
   - Chest
+  - House
   layers:
   - Default
   - TransparentFX

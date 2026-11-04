@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private GameObject chestText;
+    [SerializeField] private GameObject openText;
     [SerializeField] private CinemachineOrbitalFollow orbitalFollow;
     [SerializeField] private Animator animator;
 
@@ -16,18 +16,21 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController controller;
     private Chest _chest;
+    private House _house;
     private Vector2 input;
     private bool jumpPressed;
     private float verticalVelocity;
 
+    [SerializeField] AudioSource jumpAudioSource;
     private bool jumped;
     private float airTimer;
     private float jumpDuration;
 
 
+    [SerializeField] AudioSource stepAudioSource;
     private const float stepInterval = 0.5f;
-    private const float pitchMin = 0.9f;
-    private const float pitchMax = 1.1f;
+    private const float pitchMin = 0.8f;
+    private const float pitchMax = 1.2f;
     private float stepTimer;
 
     void Start()
@@ -57,6 +60,7 @@ public class PlayerController : MonoBehaviour
                 jumpDuration = JumpDurationFor(jumpHeight);
                 airTimer = 0f;
                 jumped = true;
+                jumpAudioSource.Play();
             }
         }
         jumpPressed = false;
@@ -125,10 +129,16 @@ public class PlayerController : MonoBehaviour
 
     public void OnInteract(InputValue value)
     {
-        if (_chest == null) return;
-        _chest.Open();
-        _chest = null;
-        if (chestText != null) chestText.SetActive(false);
+        if (_chest != null)
+        {
+            _chest.Open();
+            _chest = null;
+            if (openText != null) openText.SetActive(false);
+        }
+        else if (_house != null)
+        {
+            _house.Open();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -140,7 +150,12 @@ public class PlayerController : MonoBehaviour
         else if (other.CompareTag("Chest"))
         {
             _chest = other.GetComponentInParent<Chest>();
-            if (chestText != null) chestText.SetActive(true);
+            if (openText != null) openText.SetActive(true);
+        }
+        else if (other.CompareTag("House"))
+        {
+            _house = other.GetComponentInParent<House>();
+            if (openText != null) openText.SetActive(true);
         }
     }
 
@@ -149,14 +164,19 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Chest") && other.GetComponentInParent<Chest>() == _chest)
         {
             _chest = null;
-            if (chestText != null) chestText.SetActive(false);
+            if (openText != null) openText.SetActive(false);
+        }
+
+        if (other.CompareTag("House") && other.GetComponentInParent<House>() == _house)
+        {
+            _house = null;
+            if (openText != null) openText.SetActive(false);
         }
     }
 
     private void PlayFootstep()
     {
-        var audioSource = GetComponent<AudioSource>();
-        audioSource.pitch = Random.Range(pitchMin, pitchMax);
-        audioSource.PlayOneShot(audioSource.clip);
+        stepAudioSource.pitch = Random.Range(pitchMin, pitchMax);
+        stepAudioSource.PlayOneShot(stepAudioSource.clip);
     }
 }

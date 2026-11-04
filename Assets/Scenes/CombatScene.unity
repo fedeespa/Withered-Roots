@@ -3440,7 +3440,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3509,7 +3509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7316077777604716698, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_ApplyRootMotion
@@ -5083,7 +5083,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9e0894624d51f19498e462e51cc12732, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e0894624d51f19498e462e51cc12732, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5091,7 +5091,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e0894624d51f19498e462e51cc12732, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 9e0894624d51f19498e462e51cc12732, type: 3}
       propertyPath: m_LocalRotation.w
@@ -7195,7 +7195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7295,7 +7295,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9673,7 +9673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5714895861317836128, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13184,7 +13184,7 @@ PrefabInstance:
       objectReference: {fileID: 1708930308}
     - target: {fileID: 7917504821729190019, guid: 3743a752a4daf9b45962f436bb027854, type: 3}
       propertyPath: movementPoints
-      value: 50
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7917504821729190019, guid: 3743a752a4daf9b45962f436bb027854, type: 3}
       propertyPath: _attackableMaterial

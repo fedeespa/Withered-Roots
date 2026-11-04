@@ -1616,6 +1616,26 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7326308086656437384, guid: 81d960fe44e3f6b46bcda7b24988e254, type: 3}
   m_PrefabInstance: {fileID: 1555895019}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &758629850 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1428294196853097345, guid: 643f1f935e6a9b543bda514bf1735bf0, type: 3}
+  m_PrefabInstance: {fileID: 1367568419}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &758629851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 758629850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550e1b344ea036e4eb155705ff694e5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  Normal: {fileID: 24500006, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  CercaCueva: {fileID: -2263121616548129365, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  transitionTime: 1
 --- !u!4 &841602646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7326308086656437384, guid: 81d960fe44e3f6b46bcda7b24988e254, type: 3}
@@ -2992,7 +3012,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1428294196853097345, guid: 643f1f935e6a9b543bda514bf1735bf0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 758629851}
   m_SourcePrefab: {fileID: 100100000, guid: 643f1f935e6a9b543bda514bf1735bf0, type: 3}
 --- !u!1001 &1383283554
 PrefabInstance:
@@ -3781,9 +3804,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1650411399}
   - component: {fileID: 1650411400}
+  - component: {fileID: 1650411401}
   m_Layer: 0
   m_Name: GhostWhispers
-  m_TagString: Untagged
+  m_TagString: Ghost
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3827,7 +3851,7 @@ AudioSource:
   MinDistance: 1
   MaxDistance: 15
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -3900,6 +3924,29 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!136 &1650411401
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650411398}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 15
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!4 &1686314854 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7326308086656437384, guid: 81d960fe44e3f6b46bcda7b24988e254, type: 3}

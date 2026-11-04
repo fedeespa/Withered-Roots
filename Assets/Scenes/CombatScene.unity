@@ -2194,6 +2194,53 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9503c1c726bcf56458f5766baf8bb524, type: 3}
+--- !u!1 &344351456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 344351457}
+  - component: {fileID: 344351458}
+  m_Layer: 0
+  m_Name: AudioMezcla
+  m_TagString: Mezcla
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &344351457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344351456}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1779660645}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &344351458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344351456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550e1b344ea036e4eb155705ff694e5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioMezcla
+  Normal: {fileID: 24500006, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  CercaCueva: {fileID: -2263121616548129365, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  transitionTime: 1
 --- !u!4 &348432527 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7591302109990453512, guid: 724411d62844f8c4cb2763d3935fa418, type: 3}
@@ -10489,6 +10536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a540f156dde78174295a81a817f09a2a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TurnManager
+  audioMezcla: {fileID: 344351458}
 --- !u!4 &1526102522
 Transform:
   m_ObjectHideFlags: 0
@@ -12658,6 +12706,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 56434846}
+  - {fileID: 344351457}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1783031809

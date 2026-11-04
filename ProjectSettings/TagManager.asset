@@ -9,6 +9,8 @@ TagManager:
   - Portal
   - Chest
   - House
+  - Ghost
+  - Mezcla
   layers:
   - Default
   - TransparentFX

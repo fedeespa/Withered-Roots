@@ -48,6 +48,7 @@ public class Unit : MonoBehaviour
     private Quaternion _forwardRotation;
     void Awake()
     {
+        
         GameObject tmObj = GameObject.FindGameObjectWithTag("Manager");
         turnManager = tmObj.GetComponent<TurnManager>();
         _animator = GetComponentInChildren<Animator>();
@@ -56,7 +57,9 @@ public class Unit : MonoBehaviour
         if (isPlayerControlled && GameController.Instance != null)
         {
             movementPoints += GameController.Instance.ExtraMovementPoints();
+            Debug.Log($"Player movement points increased to {movementPoints} due to chests opened.");   
         }
+        
     }
 
     void Start()
@@ -279,12 +282,35 @@ public class Unit : MonoBehaviour
             {
                 if (e != unit && e.GetComponent<Unit>().isAlive) remainingEnemies++;
             }
-
             Destroy(unit);
 
             if (remainingEnemies == 0)
             {
-                SceneManager.LoadScene("GameWonScene");
+                if (BossSpawner.Instance != null && !BossSpawner.Instance.HasSpawned)
+                {
+                    _isInteractingWithCell = Vector3Int.zero; // bloquea clicks durante la intro
+                    DestroyWalkableTiles();
+
+                    // El jugador camina hacia la entrada mientras la boss sube
+                    Coroutine walk = null;
+                    if (BossSpawner.Instance.RetreatPoint != null)
+                        walk = StartCoroutine(WalkTo(BossSpawner.Instance.RetreatPoint.position));
+
+                    yield return StartCoroutine(BossSpawner.Instance.SpawnBoss());
+                    if (walk != null) yield return walk; // espera si todavía está caminando
+
+                    _isInteractingWithCell = null;
+
+                    // La boss mira al jugador en su nueva posición
+                    foreach (var e in GameObject.FindGameObjectsWithTag("Enemy"))
+                        StartCoroutine(e.GetComponent<Unit>().RotateToPlayer());
+
+                    UpdateRemainingMovement();
+                }
+                else
+                {
+                    SceneManager.LoadScene("GameWonScene");
+                }
             }
             else
             {
@@ -292,7 +318,7 @@ public class Unit : MonoBehaviour
                 UpdateRemainingMovement();
             }
         }
-    }
+        }
 
     private IEnumerator PunchRoutine()
     {
@@ -512,5 +538,43 @@ public class Unit : MonoBehaviour
         }
 
         transform.rotation = target;
+    }
+    public IEnumerator WalkTo(Vector3 worldTarget)
+    {
+        Vector3 target = new Vector3(Mathf.Round(worldTarget.x), transform.position.y, Mathf.Round(worldTarget.z));
+        List<Vector3> path = FindPath(transform.position, target);
+
+        if (path.Count == 0)
+        {
+            Debug.LogWarning("WalkTo: no se encontró camino hasta " + target);
+            yield break;
+        }
+
+        if (_animator != null) _animator.SetBool(IsMovingHash, true);
+        if (_walkSource != null) _walkRoutine = StartCoroutine(WalkRoutine());
+
+        foreach (Vector3 node in path)
+        {
+            Vector3 dir = node - transform.position;
+            dir.y = 0f;
+            Quaternion targetRotation = dir.sqrMagnitude > 0.001f
+                ? Quaternion.LookRotation(dir, Vector3.up)
+                : transform.rotation;
+
+            while (Vector3.Distance(transform.position, node) > 0.001f)
+            {
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, TURN_SPEED * Time.deltaTime);
+                transform.position = Vector3.MoveTowards(transform.position, node, SPEED * Time.deltaTime);
+                yield return null;
+            }
+            transform.position = node;
+        }
+
+        if (_animator != null) _animator.SetBool(IsMovingHash, false);
+        if (_walkRoutine != null)
+        {
+            StopCoroutine(_walkRoutine);
+            _walkRoutine = null;
+        }
     }
 }

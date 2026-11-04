@@ -18,7 +18,7 @@ public class TurnManager : MonoBehaviour
 
     void Start()
     { 
-        audioMezcla.normal();
+        audioMezcla.cueva();
         DetermineTurnOrder();
         StartNextTurn();
     }

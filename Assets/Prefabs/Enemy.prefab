@@ -297,6 +297,7 @@ MonoBehaviour:
   _walkableTilePrefab: {fileID: 5482680452895440697, guid: 7d54d733cb27f47028e1b4e13ed6f1d1, type: 3}
   grid: {fileID: 0}
   _attackSource: {fileID: 3131352473989370785}
+  _walkSource: {fileID: 0}
   _litMaterial: {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
   _attackableMaterial: {fileID: 2100000, guid: 5c7e816b1a4f6432d975b130617ad636, type: 2}
 --- !u!95 &7316077777604716698
@@ -330,7 +331,7 @@ AudioSource:
   m_GameObject: {fileID: 5714895861317836128}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -1329459526284780751, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  OutputAudioMixerGroup: {fileID: 2258719952763052592, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 2809a63545c95094e865dd3812a92a7c, type: 3}
   m_PlayOnAwake: 0

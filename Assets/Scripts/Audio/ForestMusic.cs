@@ -4,7 +4,7 @@ using UnityEngine;
 public class ForestMusic : MonoBehaviour
 {
     [SerializeField] private AudioSource _otherAudioSource;
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

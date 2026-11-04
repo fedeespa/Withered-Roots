@@ -363,7 +363,7 @@ PrefabInstance:
       objectReference: {fileID: 902983574}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -396,7 +396,7 @@ AudioSource:
   m_GameObject: {fileID: 56434844}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -1329459526284780751, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  OutputAudioMixerGroup: {fileID: 8353674390975904366, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 482fdf4a580b743c083213a5d846396c, type: 3}
   m_PlayOnAwake: 1
@@ -2240,6 +2240,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AudioMezcla
   Normal: {fileID: 24500006, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   CercaCueva: {fileID: -2263121616548129365, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  Cueva: {fileID: 5102513244093372458, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  Pantano: {fileID: -635150107797572315, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   transitionTime: 1
 --- !u!4 &348432527 stripped
 Transform:
@@ -3873,7 +3875,7 @@ AudioSource:
   m_GameObject: {fileID: 588472733}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 2258719952763052592, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 2809a63545c95094e865dd3812a92a7c, type: 3}
   m_PlayOnAwake: 1
@@ -5402,7 +5404,7 @@ PrefabInstance:
       objectReference: {fileID: 1882458052}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6519,7 +6521,7 @@ PrefabInstance:
       objectReference: {fileID: 1820980392}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7546,7 +7548,7 @@ PrefabInstance:
       objectReference: {fileID: 985617402}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9093,7 +9095,7 @@ PrefabInstance:
       objectReference: {fileID: 335080368}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11954,7 +11956,7 @@ AudioSource:
   m_GameObject: {fileID: 1708930302}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -1329459526284780751, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  OutputAudioMixerGroup: {fileID: 2258719952763052592, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 4ea16678d9cbd954a8f871fb2970fb95, type: 3}
   m_PlayOnAwake: 0
@@ -12051,7 +12053,7 @@ AudioSource:
   m_GameObject: {fileID: 1708930302}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: -1329459526284780751, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  OutputAudioMixerGroup: {fileID: 2258719952763052592, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: ffef4e168512b4bccb8321307398a426, type: 3}
   m_PlayOnAwake: 0
@@ -12205,7 +12207,7 @@ PrefabInstance:
       objectReference: {fileID: 76741315}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13890,7 +13892,7 @@ PrefabInstance:
       objectReference: {fileID: 1190728990}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -13973,7 +13975,7 @@ PrefabInstance:
       objectReference: {fileID: 1294223331}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15306,7 +15308,7 @@ PrefabInstance:
       objectReference: {fileID: 86281819}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15665,7 +15667,7 @@ PrefabInstance:
       objectReference: {fileID: 1737430837}
     - target: {fileID: 8721836170643270788, guid: 8bbf9909076b7470db130e9399ba59ec, type: 3}
       propertyPath: m_VersionIndex
-      value: 280
+      value: 283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16223,6 +16225,10 @@ PrefabInstance:
       propertyPath: grid
       value: 
       objectReference: {fileID: 1969496764}
+    - target: {fileID: 3131352473989370785, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 2258719952763052592, guid: 2064389ccd142419281614ee2281dc15, type: 2}
     - target: {fileID: 4901239301758732250, guid: ac5ace9ab919d23498e15a4bce214d44, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4

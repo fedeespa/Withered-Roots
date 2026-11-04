@@ -1635,6 +1635,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   Normal: {fileID: 24500006, guid: 2064389ccd142419281614ee2281dc15, type: 2}
   CercaCueva: {fileID: -2263121616548129365, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  Cueva: {fileID: 5102513244093372458, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  Pantano: {fileID: 0}
   transitionTime: 1
 --- !u!4 &841602646 stripped
 Transform:

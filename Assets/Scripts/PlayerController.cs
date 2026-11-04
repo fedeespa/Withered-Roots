@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 [RequireComponent(typeof(CharacterController))]
-
+[RequireComponent(typeof(AudioSource))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private GameObject chestText;
@@ -155,7 +155,7 @@ public class PlayerController : MonoBehaviour
 
     private void PlayFootstep()
     {
-        var audioSource = GetComponentInChildren<AudioSource>();
+        var audioSource = GetComponent<AudioSource>();
         audioSource.pitch = Random.Range(pitchMin, pitchMax);
         audioSource.PlayOneShot(audioSource.clip);
     }

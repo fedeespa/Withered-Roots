@@ -1309,7 +1309,7 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: 1335320902}
-        Gain: 1
+        Gain: 0.2
         CancelDeltaTime: 1
       InputValue: 0
       Driver:
@@ -1320,7 +1320,7 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: 317355005}
-        Gain: -1
+        Gain: -0.2
         CancelDeltaTime: 1
       InputValue: 0
       Driver:

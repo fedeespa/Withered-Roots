@@ -38,6 +38,7 @@ public class Chest : MonoBehaviour
         if (material.HasProperty("_EmissionColor"))
         {
             material.SetColor("_EmissionColor", Color.black);
+            material.globalIlluminationFlags = MaterialGlobalIlluminationFlags.EmissiveIsBlack;
         }
     }
 

@@ -17,8 +17,8 @@ public class TurnManager : MonoBehaviour
     private AudioMezcla audioMezcla;
 
     void Start()
-    { 
-        audioMezcla.cueva();
+    {
+        audioMezcla.Cueva();
         DetermineTurnOrder();
         StartNextTurn();
     }

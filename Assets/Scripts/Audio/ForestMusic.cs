@@ -3,19 +3,50 @@ using UnityEngine;
 
 public class ForestMusic : MonoBehaviour
 {
+    [SerializeField] private LevelMusicState _levelMusicState;
     [SerializeField] private AudioSource _otherAudioSource;
-    
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            StartCoroutine(Crossfade());
+            if (_levelMusicState != LevelMusicState.nearCave)
+            {
+                StartCoroutine(Crossfade());
+            }
+
+            switch (_levelMusicState)
+            {
+                case LevelMusicState.normal:
+                    {
+                        AudioMezcla.Instance.Normal();
+                        break;
+                    }
+                case LevelMusicState.swamp:
+                    {
+                        AudioMezcla.Instance.Pantano();
+                        break;
+                    }
+                case LevelMusicState.nearCave:
+                    {
+                        AudioMezcla.Instance.CercaCueva();
+                        break;
+                    }
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && _levelMusicState == LevelMusicState.nearCave)
+        {
+            AudioMezcla.Instance.Pantano();
         }
     }
 
     public IEnumerator Crossfade()
     {
-        AudioSource audioSource = GetComponent<AudioSource>(); 
+        AudioSource audioSource = GetComponent<AudioSource>();
 
         float startFromVol = _otherAudioSource.volume;
 
@@ -43,4 +74,9 @@ public class ForestMusic : MonoBehaviour
 
         if (_otherAudioSource.isPlaying) _otherAudioSource.Stop();
     }
+}
+
+public enum LevelMusicState
+{
+    normal, swamp, nearCave
 }

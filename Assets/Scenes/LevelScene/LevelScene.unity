@@ -1616,28 +1616,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7326308086656437384, guid: 81d960fe44e3f6b46bcda7b24988e254, type: 3}
   m_PrefabInstance: {fileID: 1555895019}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &758629850 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1428294196853097345, guid: 643f1f935e6a9b543bda514bf1735bf0, type: 3}
-  m_PrefabInstance: {fileID: 1367568419}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &758629851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 758629850}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 550e1b344ea036e4eb155705ff694e5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  Normal: {fileID: 24500006, guid: 2064389ccd142419281614ee2281dc15, type: 2}
-  CercaCueva: {fileID: -2263121616548129365, guid: 2064389ccd142419281614ee2281dc15, type: 2}
-  Cueva: {fileID: 5102513244093372458, guid: 2064389ccd142419281614ee2281dc15, type: 2}
-  Pantano: {fileID: 0}
-  transitionTime: 1
 --- !u!4 &841602646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7326308086656437384, guid: 81d960fe44e3f6b46bcda7b24988e254, type: 3}
@@ -1658,6 +1636,7 @@ GameObject:
   m_Component:
   - component: {fileID: 885037894}
   - component: {fileID: 885037893}
+  - component: {fileID: 885037895}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -1693,6 +1672,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &885037895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 885037892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 550e1b344ea036e4eb155705ff694e5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AudioMezcla
+  normal: {fileID: 24500006, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  cercaCueva: {fileID: -2263121616548129365, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  cueva: {fileID: 5102513244093372458, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  pantano: {fileID: -635150107797572315, guid: 2064389ccd142419281614ee2281dc15, type: 2}
+  transitionTime: 1
 --- !u!1001 &891223964
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2246,7 +2242,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1050800587}
   m_Layer: 0
-  m_Name: Music
+  m_Name: MusicZones
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2475,6 +2471,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a554fe9366349109e7f3aee7228778, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ForestMusic
+  _levelMusicState: 1
   _otherAudioSource: {fileID: 1248465571}
 --- !u!82 &1238230936
 AudioSource:
@@ -2731,6 +2728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a554fe9366349109e7f3aee7228778, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ForestMusic
+  _levelMusicState: 0
   _otherAudioSource: {fileID: 1238230936}
 --- !u!65 &1248465573
 BoxCollider:
@@ -3014,10 +3012,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1428294196853097345, guid: 643f1f935e6a9b543bda514bf1735bf0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 758629851}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 643f1f935e6a9b543bda514bf1735bf0, type: 3}
 --- !u!1001 &1383283554
 PrefabInstance:
@@ -3807,6 +3802,7 @@ GameObject:
   - component: {fileID: 1650411399}
   - component: {fileID: 1650411400}
   - component: {fileID: 1650411401}
+  - component: {fileID: 1650411402}
   m_Layer: 0
   m_Name: GhostWhispers
   m_TagString: Ghost
@@ -3949,6 +3945,20 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1650411402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650411398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2a554fe9366349109e7f3aee7228778, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ForestMusic
+  _levelMusicState: 2
+  _otherAudioSource: {fileID: 0}
 --- !u!4 &1686314854 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7326308086656437384, guid: 81d960fe44e3f6b46bcda7b24988e254, type: 3}

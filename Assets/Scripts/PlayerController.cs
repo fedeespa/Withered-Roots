@@ -145,6 +145,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.CompareTag("Portal"))
         {
+            AudioMezcla.Instance.Cueva();
             SceneManager.LoadScene("CombatScene");
         }
         else if (other.CompareTag("Chest"))

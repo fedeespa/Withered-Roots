@@ -3,19 +3,19 @@ using UnityEngine.Audio;
 
 public class AudioMezcla : MonoBehaviour
 {
-    
-    [SerializeField] private AudioMixerSnapshot Normal;
 
-    [SerializeField] private AudioMixerSnapshot CercaCueva;
+    [SerializeField] private AudioMixerSnapshot normal;
 
-    [SerializeField] private AudioMixerSnapshot Cueva;
-    [SerializeField] private AudioMixerSnapshot Pantano;
+    [SerializeField] private AudioMixerSnapshot cercaCueva;
+
+    [SerializeField] private AudioMixerSnapshot cueva;
+    [SerializeField] private AudioMixerSnapshot pantano;
 
     [Min(0.0f)] public float transitionTime = 1.0f;
-    public void normal() { if (Normal != null) Normal.TransitionTo(transitionTime); }
-    public void cercacueva() { if (CercaCueva != null) CercaCueva.TransitionTo(transitionTime); } 
-    public void cueva() { if (Cueva != null) Cueva.TransitionTo(transitionTime); }
-    public void pantano() { if (Pantano != null) Pantano.TransitionTo(transitionTime); }
+    public void Normal() { if (normal != null) normal.TransitionTo(transitionTime); }
+    public void CercaCueva() { if (cercaCueva != null) cercaCueva.TransitionTo(transitionTime); }
+    public void Cueva() { if (cueva != null) cueva.TransitionTo(0f); }
+    public void Pantano() { if (pantano != null) pantano.TransitionTo(transitionTime); }
     private static AudioMezcla instance;
     public static AudioMezcla Instance => instance;
 
@@ -33,15 +33,6 @@ public class AudioMezcla : MonoBehaviour
     }
     private void Start()
     {
-        normal();
+        normal.TransitionTo(0f);
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Ghost"))
-        {
-            cercacueva();
-        }
-    }
-    
-
 }

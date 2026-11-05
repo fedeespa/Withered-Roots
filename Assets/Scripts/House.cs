@@ -8,7 +8,7 @@ public class House : MonoBehaviour
 {
     [SerializeField] private AudioSource _audioSource;
 
-    public async void Open()
+    public void Open()
     {
         _audioSource.Stop();
         _audioSource.Play();

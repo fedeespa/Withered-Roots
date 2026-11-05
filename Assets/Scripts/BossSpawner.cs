@@ -16,6 +16,17 @@ public class BossSpawner : MonoBehaviour
 
     public bool HasSpawned { get; private set; }
 
+    [SerializeField] private AudioClip victoryClip;
+    [SerializeField] private float victoryExtraDelay = 0.5f; 
+
+    public IEnumerator PlayVictory()
+    {
+        if (voiceSource != null && victoryClip != null)
+        {
+            voiceSource.PlayOneShot(victoryClip);
+            yield return new WaitForSeconds(victoryClip.length + victoryExtraDelay);
+        }
+    }
     void Awake()
     {
         Instance = this;

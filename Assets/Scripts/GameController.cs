@@ -23,6 +23,15 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void ResetChests()
+    {
+        _chestsOpened = 0;
+        if (_chestText != null)
+        {
+            _chestText.text = $"0 / {_totalChests}";
+        }
+    }
+
     public void OnChestOpened()
     {
         _chestText.text = $"{++_chestsOpened} / {_totalChests}";

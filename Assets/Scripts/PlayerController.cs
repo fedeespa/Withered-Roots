@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         jumpDuration = JumpDurationFor(jumpHeight);
+        AudioMezcla.Instance.Normal();
     }
 
     float JumpDurationFor(float height)

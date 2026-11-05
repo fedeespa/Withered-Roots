@@ -1,10 +1,5 @@
-
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
-using Unity.VisualScripting;
-using UnityEngine.InputSystem.iOS;
 
 public class TurnManager : MonoBehaviour
 {
@@ -13,12 +8,10 @@ public class TurnManager : MonoBehaviour
     private Queue<Unit> turnQueue = new();
 
     private Unit activeUnit;
-    [SerializeField]
-    private AudioMezcla audioMezcla;
 
     void Start()
     {
-        audioMezcla.Cueva();
+        AudioMezcla.Instance.Cueva();
         DetermineTurnOrder();
         StartNextTurn();
     }

@@ -48,7 +48,7 @@ public class Unit : MonoBehaviour
     private Quaternion _forwardRotation;
     void Awake()
     {
-        
+
         GameObject tmObj = GameObject.FindGameObjectWithTag("Manager");
         turnManager = tmObj.GetComponent<TurnManager>();
         _animator = GetComponentInChildren<Animator>();
@@ -57,9 +57,9 @@ public class Unit : MonoBehaviour
         if (isPlayerControlled && GameController.Instance != null)
         {
             movementPoints += GameController.Instance.ExtraMovementPoints();
-            Debug.Log($"Player movement points increased to {movementPoints} due to chests opened.");   
+            Debug.Log($"Player movement points increased to {movementPoints} due to chests opened.");
         }
-        
+
     }
 
     void Start()
@@ -273,6 +273,7 @@ public class Unit : MonoBehaviour
 
         if (entity.GetIsPlayerControlled())
         {
+            AudioMezcla.Instance.Normal();
             SceneManager.LoadScene("GameOverScene");
         }
         else
@@ -288,14 +289,14 @@ public class Unit : MonoBehaviour
             {
                 if (BossSpawner.Instance != null && !BossSpawner.Instance.HasSpawned)
                 {
-                    _isInteractingWithCell = Vector3Int.zero; 
+                    _isInteractingWithCell = Vector3Int.zero;
                     DestroyWalkableTiles();
                     Coroutine walk = null;
                     if (BossSpawner.Instance.RetreatPoint != null)
                         walk = StartCoroutine(WalkTo(BossSpawner.Instance.RetreatPoint.position));
 
                     yield return StartCoroutine(BossSpawner.Instance.SpawnBoss());
-                    if (walk != null) yield return walk; 
+                    if (walk != null) yield return walk;
 
                     _isInteractingWithCell = null;
                     foreach (var e in GameObject.FindGameObjectsWithTag("Enemy"))
@@ -310,8 +311,9 @@ public class Unit : MonoBehaviour
                     if (BossSpawner.Instance != null)
                         yield return StartCoroutine(BossSpawner.Instance.PlayVictory());
 
+                    AudioMezcla.Instance.Normal();
                     SceneManager.LoadScene("GameWonScene");
-                
+
                 }
             }
             else
@@ -320,7 +322,7 @@ public class Unit : MonoBehaviour
                 UpdateRemainingMovement();
             }
         }
-        }
+    }
 
     private IEnumerator PunchRoutine()
     {

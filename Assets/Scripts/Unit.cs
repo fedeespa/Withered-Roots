@@ -288,20 +288,16 @@ public class Unit : MonoBehaviour
             {
                 if (BossSpawner.Instance != null && !BossSpawner.Instance.HasSpawned)
                 {
-                    _isInteractingWithCell = Vector3Int.zero; // bloquea clicks durante la intro
+                    _isInteractingWithCell = Vector3Int.zero; 
                     DestroyWalkableTiles();
-
-                    // El jugador camina hacia la entrada mientras la boss sube
                     Coroutine walk = null;
                     if (BossSpawner.Instance.RetreatPoint != null)
                         walk = StartCoroutine(WalkTo(BossSpawner.Instance.RetreatPoint.position));
 
                     yield return StartCoroutine(BossSpawner.Instance.SpawnBoss());
-                    if (walk != null) yield return walk; // espera si todavía está caminando
+                    if (walk != null) yield return walk; 
 
                     _isInteractingWithCell = null;
-
-                    // La boss mira al jugador en su nueva posición
                     foreach (var e in GameObject.FindGameObjectsWithTag("Enemy"))
                         StartCoroutine(e.GetComponent<Unit>().RotateToPlayer());
 
@@ -309,7 +305,13 @@ public class Unit : MonoBehaviour
                 }
                 else
                 {
+                    _isInteractingWithCell = Vector3Int.zero; // evita clicks mientras suena la voz
+
+                    if (BossSpawner.Instance != null)
+                        yield return StartCoroutine(BossSpawner.Instance.PlayVictory());
+
                     SceneManager.LoadScene("GameWonScene");
+                
                 }
             }
             else
